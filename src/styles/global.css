@@ -1,0 +1,320 @@
+@import "@fontsource-variable/anybody/wdth.css";
+@import "@fontsource-variable/newsreader/wght.css";
+
+:root {
+  --papel: #f3efe6;
+  --tinta: #1a1714;
+  --filete: color-mix(in srgb, var(--tinta) 22%, var(--papel));
+  --display: "Anybody Variable", sans-serif;
+  --texto: "Newsreader Variable", serif;
+  color-scheme: light;
+  background: var(--papel);
+  color: var(--tinta);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--papel);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--texto);
+  font-weight: 450;
+  font-size: 1.125rem;
+  line-height: 1.5;
+  background: var(--papel);
+  color: var(--tinta);
+}
+
+:focus-visible {
+  outline: 2px solid var(--tinta);
+  outline-offset: 3px;
+}
+
+a {
+  color: inherit;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem 1.5rem;
+  padding: 1.15rem 1.5rem;
+  background: var(--papel);
+  border-bottom: 1px solid var(--filete);
+}
+
+.marca {
+  font-family: var(--display);
+  font-stretch: 125%;
+  font-weight: 560;
+  font-size: 1rem;
+  letter-spacing: -0.03em;
+  text-decoration: none;
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.25rem;
+}
+
+.nav a {
+  font-family: var(--display);
+  font-stretch: 100%;
+  font-weight: 500;
+  font-size: 0.95rem;
+  text-decoration: none;
+}
+
+.nav a[aria-current="page"] {
+  text-decoration: underline;
+  text-underline-offset: 0.28em;
+}
+
+main {
+  width: min(72rem, calc(100% - 3rem));
+  margin: 0 auto;
+  padding: 4.5rem 0 6rem;
+}
+
+.rol,
+.ficha,
+.fila-anio,
+.fila-meta,
+.premios,
+.siguiente span,
+.contacto dt {
+  font-family: var(--display);
+  font-stretch: 100%;
+  font-weight: 500;
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.home-nombre,
+.caso-titulo,
+.pagina-titulo {
+  font-family: var(--display);
+  font-stretch: 125%;
+  font-weight: 560;
+  letter-spacing: -0.03em;
+  line-height: 0.92;
+  margin: 0;
+}
+
+.home-nombre {
+  font-size: clamp(3.4rem, 10vw, 7.25rem);
+  max-width: 9ch;
+}
+
+.rol {
+  margin: 1rem 0 0;
+}
+
+.frase,
+.desafio,
+.acerca p,
+.vacio {
+  max-width: 62ch;
+}
+
+.frase {
+  margin: 1.75rem 0 0;
+  font-size: 1.45rem;
+  line-height: 1.35;
+}
+
+.lista {
+  list-style: none;
+  margin: 3.5rem 0 0;
+  padding: 0;
+}
+
+.fila {
+  display: grid;
+  grid-template-columns: 4.5rem 1fr;
+  gap: 0.2rem 1.25rem;
+  padding: 1.2rem 0 1.2rem 0.85rem;
+  border-top: 1px solid var(--filete);
+  border-left: 3px solid var(--caso, var(--tinta));
+  text-decoration: none;
+}
+
+.fila-titulo {
+  font-family: var(--display);
+  font-stretch: 125%;
+  font-weight: 560;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.fila-meta {
+  grid-column: 2;
+}
+
+.premios,
+.mail {
+  margin: 2.5rem 0 0;
+}
+
+.mail {
+  font-family: var(--display);
+  font-stretch: 100%;
+  font-weight: 500;
+}
+
+.pagina-titulo {
+  font-size: clamp(2.6rem, 6vw, 4.5rem);
+  max-width: 12ch;
+}
+
+.vacio {
+  margin: 2rem 0 0;
+}
+
+.caso {
+  display: grid;
+  gap: 2.25rem;
+}
+
+.caso-titulo {
+  font-size: clamp(2.4rem, 6vw, 4.6rem);
+  max-width: 14ch;
+}
+
+.ficha {
+  display: grid;
+  grid-template-columns: 8.5rem 1fr;
+  gap: 0.45rem 1rem;
+  margin: 0;
+  max-width: 40rem;
+}
+
+.ficha dt {
+  margin: 0;
+}
+
+.ficha dd {
+  margin: 0;
+}
+
+.desafio {
+  margin: 0;
+  font-size: 1.35rem;
+  line-height: 1.45;
+}
+
+.pieza,
+.apoyos {
+  display: grid;
+  gap: 1rem;
+  margin-inline: calc(50% - 50vw);
+  width: 100vw;
+}
+
+.pieza img,
+.pieza video,
+.apoyos img,
+.apoyos video {
+  display: block;
+  width: min(72rem, 100%);
+  height: auto;
+  margin-inline: auto;
+}
+
+.siguiente {
+  display: grid;
+  gap: 0.35rem;
+  justify-items: start;
+  text-decoration: none;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--filete);
+}
+
+.siguiente-titulo {
+  font-family: var(--display);
+  font-stretch: 125%;
+  font-weight: 560;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+}
+
+.acerca {
+  display: grid;
+  gap: 2rem;
+  margin-top: 2.5rem;
+}
+
+.acerca h2 {
+  margin: 0 0 0.4rem;
+  font-family: var(--display);
+  font-stretch: 100%;
+  font-weight: 560;
+  font-size: 0.95rem;
+}
+
+.acerca p {
+  margin: 0.2rem 0 0;
+}
+
+.contacto {
+  margin: 2.5rem 0 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.contacto a {
+  font-family: var(--display);
+  font-stretch: 125%;
+  font-weight: 560;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  letter-spacing: -0.03em;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.nota {
+  margin: 2rem 0 0;
+  max-width: 62ch;
+}
+
+@media (max-width: 40rem) {
+  .ficha {
+    grid-template-columns: 1fr;
+    gap: 0.15rem;
+  }
+
+  .ficha div + div {
+    margin-top: 0.65rem;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .home-nombre {
+    animation: subir 700ms ease-out both;
+  }
+}
+
+@keyframes subir {
+  from {
+    transform: translateY(0.45rem);
+  }
+  to {
+    transform: none;
+  }
+}

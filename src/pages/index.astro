@@ -1,0 +1,33 @@
+---
+import Base from "../layouts/Base.astro";
+import CasoFila from "../components/CasoFila.astro";
+import { sitio } from "../site";
+import { casosPublicados, lineaPremios } from "../lib/casos";
+
+const casos = await casosPublicados();
+const destacados = casos.filter((caso) => caso.data.destacado);
+const premios = lineaPremios(casos);
+---
+
+<Base titulo={sitio.nombre} descripcion={sitio.frase}>
+  <h1 class="home-nombre">{sitio.nombre}</h1>
+  <p class="rol">{sitio.rol}</p>
+  <p class="frase">{sitio.frase}</p>
+  {
+    destacados.length > 0 && (
+      <ol class="lista">
+        {destacados.map((caso) => (
+          <li>
+            <CasoFila caso={caso} />
+          </li>
+        ))}
+      </ol>
+    )
+  }
+  {premios && <p class="premios">{premios}</p>}
+  {sitio.email && (
+    <p class="mail">
+      <a href={`mailto:${sitio.email}`}>{sitio.email}</a>
+    </p>
+  )}
+</Base>

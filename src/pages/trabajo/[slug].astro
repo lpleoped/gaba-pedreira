@@ -1,0 +1,99 @@
+---
+import Base from "../../layouts/Base.astro";
+import Pieza from "../../components/Pieza.astro";
+import { sitio } from "../../site";
+import { casoSiguiente, casosPublicados, etiquetaCliente } from "../../lib/casos";
+
+export async function getStaticPaths() {
+  const casos = await casosPublicados();
+  return casos.map((caso) => ({
+    params: { slug: caso.data.slug },
+    props: { id: caso.id },
+  }));
+}
+
+interface Props {
+  id: string;
+}
+
+const { id } = Astro.props;
+const casos = await casosPublicados();
+const caso = casos.find((entrada) => entrada.id === id);
+if (!caso) {
+  throw new Error("Caso no encontrado");
+}
+
+const siguiente = casoSiguiente(casos, caso);
+const descripcion = caso.data.og?.descripcion ?? caso.data.desafio;
+const titulo = `${caso.data.titulo} — ${sitio.nombre}`;
+const imagen = caso.data.og?.imagen.src;
+const tieneVideo = Boolean(caso.data.pieza.video);
+const ficha = [
+  ["Rol", caso.data.rol],
+  ["Con", caso.data.colaboradores.length ? caso.data.colaboradores.join(", ") : undefined],
+  ["Cliente", caso.data.cliente],
+  ["Año", String(caso.data.anio)],
+  ["Disciplina", caso.data.disciplinas.join(", ")],
+].filter((fila): fila is [string, string] => Boolean(fila[1]));
+---
+
+<Base
+  titulo={caso.data.og?.titulo ?? titulo}
+  descripcion={descripcion}
+  imagen={imagen}
+  prefetch={siguiente ? `/trabajo/${siguiente.data.slug}` : undefined}
+>
+  <article class="caso" style={`--caso: ${caso.data.colorDeCaso}`}>
+    <h1 class="caso-titulo">{caso.data.titulo}</h1>
+    <dl class="ficha">
+      {
+        ficha.map(([etiqueta, valor]) => (
+          <div>
+            <dt>{etiqueta}</dt>
+            <dd>{valor}</dd>
+          </div>
+        ))
+      }
+    </dl>
+    <p class="desafio">{caso.data.desafio}</p>
+    <Pieza medio={caso.data.pieza} principal />
+    {
+      caso.data.apoyos.length > 0 && (
+        <div class="apoyos">
+          {caso.data.apoyos.map((apoyo) => (
+            <Pieza medio={apoyo} />
+          ))}
+        </div>
+      )
+    }
+    {
+      caso.data.premios.length > 0 && (
+        <ul class="premios">
+          {caso.data.premios.map((premio) => (
+            <li>
+              {premio.nombre}, {premio.anio}
+            </li>
+          ))}
+        </ul>
+      )
+    }
+    {
+      siguiente && (
+        <a class="siguiente" href={`/trabajo/${siguiente.data.slug}`}>
+          <span>Siguiente</span>
+          <span class="siguiente-titulo">{siguiente.data.titulo}</span>
+          <span>
+            {etiquetaCliente(siguiente)}, {siguiente.data.anio}
+          </span>
+        </a>
+      )
+    }
+  </article>
+  {
+    tieneVideo && (
+      <script>
+        import "../../scripts/caso.ts";
+      </script>
+    )
+  }
+</Base>

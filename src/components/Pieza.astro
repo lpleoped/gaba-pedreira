@@ -1,0 +1,42 @@
+---
+interface Medio {
+  alt: string;
+  ancho: number;
+  alto: number;
+  imagen?: { src: string };
+  video?: string;
+  poster?: { src: string };
+}
+
+interface Props {
+  medio: Medio;
+  principal?: boolean;
+}
+
+const { medio, principal = false } = Astro.props;
+const clase = principal ? "pieza" : undefined;
+---
+
+{
+  medio.video && medio.poster ? (
+    <div class={clase}>
+      <video
+        controls
+        playsinline
+        preload="none"
+        poster={medio.poster.src}
+        width={medio.ancho}
+        height={medio.alto}
+        data-caso-video
+      >
+        <source src={medio.video} type="video/mp4" />
+      </video>
+    </div>
+  ) : (
+    medio.imagen && (
+      <div class={clase}>
+        <img src={medio.imagen.src} width={medio.ancho} height={medio.alto} alt={medio.alt} />
+      </div>
+    )
+  )
+}

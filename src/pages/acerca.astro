@@ -1,0 +1,25 @@
+---
+import Base from "../layouts/Base.astro";
+import { sitio } from "../site";
+---
+
+<Base titulo={`Acerca — ${sitio.nombre}`} descripcion={sitio.frase}>
+  <h1 class="pagina-titulo">Acerca</h1>
+  <div class="acerca">
+    <section>
+      <h2>Ahora</h2>
+      <p>Directora de arte en DDB Uruguay.</p>
+    </section>
+    <section>
+      <h2>Desde</h2>
+      <p>Montevideo.</p>
+    </section>
+    <section>
+      <h2>Antes</h2>
+      <p>Diseño y animación en Canal 4.</p>
+      <p>Producción audiovisual en Cámara\TBWA.</p>
+      <p>Creativa audiovisual en Alva Creative House.</p>
+    </section>
+    <p><a href="/contacto">Contacto</a></p>
+  </div>
+</Base>

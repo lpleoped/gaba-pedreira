@@ -1,0 +1,25 @@
+---
+import Base from "../../layouts/Base.astro";
+import CasoFila from "../../components/CasoFila.astro";
+import { sitio } from "../../site";
+import { casosPublicados } from "../../lib/casos";
+
+const casos = await casosPublicados();
+---
+
+<Base titulo={`Trabajo — ${sitio.nombre}`} descripcion={sitio.frase}>
+  <h1 class="pagina-titulo">Trabajo</h1>
+  {
+    casos.length === 0 ? (
+      <p class="vacio">La selección se publica cuando los casos estén cerrados.</p>
+    ) : (
+      <ol class="lista">
+        {casos.map((caso) => (
+          <li>
+            <CasoFila caso={caso} />
+          </li>
+        ))}
+      </ol>
+    )
+  }
+</Base>

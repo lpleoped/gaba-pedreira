@@ -1,0 +1,18 @@
+---
+import type { Caso } from "../lib/casos";
+import { etiquetaCliente } from "../lib/casos";
+
+interface Props {
+  caso: Caso;
+}
+
+const { caso } = Astro.props;
+---
+
+<a class="fila" href={`/trabajo/${caso.data.slug}`} style={`--caso: ${caso.data.colorDeCaso}`}>
+  <span class="fila-anio">{caso.data.anio}</span>
+  <span class="fila-titulo">{caso.data.titulo}</span>
+  <span class="fila-meta">
+    {etiquetaCliente(caso)} · {caso.data.disciplinas.join(", ")}
+  </span>
+</a>

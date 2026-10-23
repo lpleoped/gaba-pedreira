@@ -1,0 +1,18 @@
+---
+import Base from "../layouts/Base.astro";
+import { sitio } from "../site";
+---
+
+<Base titulo={`Contacto — ${sitio.nombre}`} descripcion={sitio.frase}>
+  <h1 class="pagina-titulo">Contacto</h1>
+  <div class="contacto">
+    {
+      sitio.email && (
+        <a href={`mailto:${sitio.email}`}>{sitio.email}</a>
+      )
+    }
+    <a href={sitio.behance}>Behance</a>
+    <a href={sitio.linkedin}>LinkedIn</a>
+  </div>
+  {!sitio.email && <p class="nota">El mail se suma cuando ella lo confirme.</p>}
+</Base>

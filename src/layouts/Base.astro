@@ -1,0 +1,66 @@
+---
+import "../styles/global.css";
+import { sitio } from "../site";
+
+interface Props {
+  titulo: string;
+  descripcion: string;
+  imagen?: string;
+  prefetch?: string;
+}
+
+const { titulo, descripcion, imagen, prefetch } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const imagenAbsoluta = imagen ? new URL(imagen, Astro.site).href : undefined;
+const path = Astro.url.pathname;
+const secciones = [
+  { href: "/trabajo", label: "Trabajo" },
+  { href: "/acerca", label: "Acerca" },
+  { href: "/contacto", label: "Contacto" },
+];
+
+function vigente(href: string) {
+  if (href === "/trabajo") return path === "/trabajo" || path.startsWith("/trabajo/");
+  return path === href;
+}
+---
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{titulo}</title>
+    <meta name="description" content={descripcion} />
+    <link rel="canonical" href={canonical.href} />
+    <meta property="og:locale" content="es_UY" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={sitio.nombre} />
+    <meta property="og:title" content={titulo} />
+    <meta property="og:description" content={descripcion} />
+    <meta property="og:url" content={canonical.href} />
+    {imagenAbsoluta && <meta property="og:image" content={imagenAbsoluta} />}
+    <meta name="twitter:card" content={imagenAbsoluta ? "summary_large_image" : "summary"} />
+    <meta name="twitter:title" content={titulo} />
+    <meta name="twitter:description" content={descripcion} />
+    {imagenAbsoluta && <meta name="twitter:image" content={imagenAbsoluta} />}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    {prefetch && <link rel="prefetch" href={prefetch} />}
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="marca" href="/">{sitio.nombre}</a>
+      <nav class="nav" aria-label="Secciones">
+        {
+          secciones.map((seccion) => (
+            <a href={seccion.href} aria-current={vigente(seccion.href) ? "page" : undefined}>
+              {seccion.label}
+            </a>
+          ))
+        }
+      </nav>
+    </header>
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>
