@@ -23,6 +23,24 @@ export function casoSiguiente(casos: Caso[], actual: Caso): Caso | undefined {
   return siguiente?.id === actual.id ? undefined : siguiente;
 }
 
+const oficios: Record<string, string> = {
+  campaña: "Campaña",
+  motion: "Motion",
+  ilustración: "Ilustración",
+  "diseño editorial": "Diseño editorial",
+  diseño: "Diseño",
+};
+
+export function etiquetaOficios(caso: Caso): string {
+  return caso.data.disciplinas.map((oficio) => oficios[oficio] ?? oficio).join(", ");
+}
+
 export function etiquetaCliente(caso: Caso): string {
   return caso.data.cliente ?? "Ilustración";
+}
+
+export function etiquetaEnlace(url: string): string {
+  if (url.includes("vimeo.com")) return "Vimeo";
+  if (url.includes("behance.net")) return "Behance";
+  return "Ver";
 }

@@ -71,6 +71,7 @@ const casos = defineCollection({
       destacado: z.boolean(),
       orden: z.number().int(),
       colorDeCaso: z.string().regex(/^#[0-9A-Fa-f]{6}$/),
+      enlace: z.string().url().optional(),
       og: z
         .object({
           titulo: z.string().min(1),

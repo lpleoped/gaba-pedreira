@@ -1,18 +1,31 @@
 ---
 import type { Caso } from "../lib/casos";
-import { etiquetaCliente } from "../lib/casos";
+import { etiquetaOficios } from "../lib/casos";
 
 interface Props {
   caso: Caso;
 }
 
 const { caso } = Astro.props;
+const still = caso.data.pieza.imagen ?? caso.data.pieza.poster;
+const meta = caso.data.cliente
+  ? `${caso.data.cliente} · ${etiquetaOficios(caso)}`
+  : etiquetaOficios(caso);
 ---
 
 <a class="fila" href={`/trabajo/${caso.data.slug}`} style={`--caso: ${caso.data.colorDeCaso}`}>
   <span class="fila-anio">{caso.data.anio}</span>
-  <span class="fila-titulo">{caso.data.titulo}</span>
-  <span class="fila-meta">
-    {etiquetaCliente(caso)} · {caso.data.disciplinas.join(", ")}
-  </span>
+  <span class="fila-titulo">{caso.data.frase ?? caso.data.titulo}</span>
+  <span class="fila-meta">{meta}</span>
+  {
+    still && (
+      <img
+        class="fila-pieza"
+        src={still.src}
+        width={caso.data.pieza.ancho}
+        height={caso.data.pieza.alto}
+        alt=""
+      />
+    )
+  }
 </a>

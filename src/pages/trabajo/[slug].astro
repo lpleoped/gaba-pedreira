@@ -2,7 +2,13 @@
 import Base from "../../layouts/Base.astro";
 import Pieza from "../../components/Pieza.astro";
 import { sitio } from "../../site";
-import { casoSiguiente, casosPublicados, etiquetaCliente } from "../../lib/casos";
+import {
+  casoSiguiente,
+  casosPublicados,
+  etiquetaCliente,
+  etiquetaEnlace,
+  etiquetaOficios,
+} from "../../lib/casos";
 
 export async function getStaticPaths() {
   const casos = await casosPublicados();
@@ -26,14 +32,15 @@ if (!caso) {
 const siguiente = casoSiguiente(casos, caso);
 const descripcion = caso.data.og?.descripcion ?? caso.data.desafio;
 const titulo = `${caso.data.titulo} — ${sitio.nombre}`;
-const imagen = caso.data.og?.imagen.src;
+const imagen =
+  caso.data.og?.imagen.src ?? caso.data.pieza.imagen?.src ?? caso.data.pieza.poster?.src;
 const tieneVideo = Boolean(caso.data.pieza.video);
 const ficha = [
   ["Rol", caso.data.rol],
   ["Con", caso.data.colaboradores.length ? caso.data.colaboradores.join(", ") : undefined],
   ["Cliente", caso.data.cliente],
   ["Año", String(caso.data.anio)],
-  ["Disciplina", caso.data.disciplinas.join(", ")],
+  ["Disciplina", etiquetaOficios(caso)],
 ].filter((fila): fila is [string, string] => Boolean(fila[1]));
 ---
 
@@ -53,6 +60,18 @@ const ficha = [
             <dd>{valor}</dd>
           </div>
         ))
+      }
+      {
+        caso.data.enlace && (
+          <div>
+            <dt>Ver</dt>
+            <dd>
+              <a href={caso.data.enlace} rel="noopener noreferrer">
+                {etiquetaEnlace(caso.data.enlace)}
+              </a>
+            </dd>
+          </div>
+        )
       }
     </dl>
     <p class="desafio">{caso.data.desafio}</p>
