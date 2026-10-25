@@ -2,9 +2,22 @@
 import Base from "../../layouts/Base.astro";
 import CasoFila from "../../components/CasoFila.astro";
 import { sitio } from "../../site";
-import { casosPublicados } from "../../lib/casos";
+import { casosPublicados, etiquetaOficios } from "../../lib/casos";
 
 const casos = await casosPublicados();
+const vistos = new Set<string>();
+const secciones = ["campaña", "motion", "ilustración", "diseño editorial", "diseño"]
+  .map((oficio) => {
+    const items = casos.filter(
+      (caso) => caso.data.disciplinas[0] === oficio && !vistos.has(caso.id),
+    );
+    for (const item of items) vistos.add(item.id);
+    const titulo = items[0] ? etiquetaOficios(items[0]).split(", ")[0] : oficio;
+    return { titulo, items };
+  })
+  .filter((seccion) => seccion.items.length > 0);
+const resto = casos.filter((caso) => !vistos.has(caso.id));
+if (resto.length > 0) secciones.push({ titulo: "Trabajo", items: resto });
 ---
 
 <Base titulo={`Trabajo — ${sitio.nombre}`} descripcion={sitio.frase}>
@@ -13,13 +26,18 @@ const casos = await casosPublicados();
     casos.length === 0 ? (
       <p class="vacio">La selección se publica cuando los casos estén cerrados.</p>
     ) : (
-      <ol class="lista">
-        {casos.map((caso) => (
-          <li>
-            <CasoFila caso={caso} />
-          </li>
-        ))}
-      </ol>
+      secciones.map((seccion) => (
+        <section class="grupo">
+          <h2>{seccion.titulo}</h2>
+          <ol class="lista">
+            {seccion.items.map((caso) => (
+              <li>
+                <CasoFila caso={caso} />
+              </li>
+            ))}
+          </ol>
+        </section>
+      ))
     )
   }
 </Base>

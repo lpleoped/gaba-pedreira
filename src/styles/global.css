@@ -116,8 +116,8 @@ main {
 }
 
 .home-nombre {
-  font-size: clamp(3.4rem, 10vw, 7.25rem);
-  max-width: 9ch;
+  font-size: clamp(3.8rem, 12vw, 8.25rem);
+  max-width: 7ch;
 }
 
 .rol {
@@ -145,9 +145,10 @@ main {
 
 .fila {
   display: grid;
-  grid-template-columns: 4.5rem 1fr;
+  grid-template-columns: 4.5rem minmax(0, 1fr);
   gap: 0.2rem 1.25rem;
-  padding: 1.2rem 0 1.2rem 0.85rem;
+  align-items: start;
+  padding: 1.15rem 0 1.35rem 0.85rem;
   border-top: 1px solid var(--filete);
   border-left: 3px solid var(--caso, var(--tinta));
   text-decoration: none;
@@ -157,9 +158,18 @@ main {
   font-family: var(--display);
   font-stretch: 125%;
   font-weight: 560;
-  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-size: clamp(1.7rem, 3.4vw, 2.8rem);
   letter-spacing: -0.03em;
-  line-height: 1;
+  line-height: 0.95;
+}
+
+.fila-pieza {
+  grid-column: 1 / -1;
+  width: 100%;
+  height: 28rem;
+  margin-top: 0.85rem;
+  object-fit: contain;
+  object-position: center;
 }
 
 .fila-meta {
@@ -194,6 +204,8 @@ main {
 .caso-titulo {
   font-size: clamp(2.4rem, 6vw, 4.6rem);
   max-width: 14ch;
+  border-left: 3px solid var(--caso, var(--tinta));
+  padding-left: 0.7rem;
 }
 
 .ficha {
@@ -208,8 +220,16 @@ main {
   margin: 0;
 }
 
+.ficha > div {
+  display: contents;
+}
+
 .ficha dd {
   margin: 0;
+}
+
+.ficha a {
+  text-underline-offset: 0.22em;
 }
 
 .desafio {
@@ -222,8 +242,10 @@ main {
 .apoyos {
   display: grid;
   gap: 1rem;
-  margin-inline: calc(50% - 50vw);
-  width: 100vw;
+}
+
+.pieza {
+  border-top: 3px solid var(--caso, var(--tinta));
 }
 
 .pieza img,
@@ -231,9 +253,8 @@ main {
 .apoyos img,
 .apoyos video {
   display: block;
-  width: min(72rem, 100%);
+  width: 100%;
   height: auto;
-  margin-inline: auto;
 }
 
 .siguiente {
@@ -252,6 +273,27 @@ main {
   font-size: clamp(1.8rem, 4vw, 3rem);
   letter-spacing: -0.03em;
   line-height: 0.95;
+}
+
+.caso .premios {
+  list-style: none;
+  padding: 0;
+}
+
+.grupo {
+  margin-top: 2.75rem;
+}
+
+.grupo h2 {
+  margin: 0;
+  font-family: var(--display);
+  font-stretch: 100%;
+  font-weight: 560;
+  font-size: 0.95rem;
+}
+
+.grupo .lista {
+  margin-top: 0.85rem;
 }
 
 .acerca {
@@ -299,14 +341,33 @@ main {
     gap: 0.15rem;
   }
 
-  .ficha div + div {
+  .ficha dt:not(:first-of-type) {
     margin-top: 0.65rem;
+  }
+
+  .fila {
+    grid-template-columns: 3.2rem minmax(0, 1fr);
+    gap: 0.15rem 0.75rem;
+  }
+
+  .fila-pieza {
+    height: 16rem;
   }
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .home-nombre {
+  .home-nombre,
+  .pieza img,
+  .apoyos img {
     animation: subir 700ms ease-out both;
+  }
+
+  .fila {
+    transition: transform 180ms ease-out;
+  }
+
+  .fila:hover {
+    transform: translateX(0.4rem);
   }
 }
 
