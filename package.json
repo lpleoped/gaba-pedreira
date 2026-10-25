@@ -1,8 +1,16 @@
 {
   "name": "gaba",
+  "version": "1.0.0",
+  "description": "Reel de dirección de arte de Gaba Pedreira. © 2026 Leonardo Pedreira. Todos los derechos reservados.",
   "private": true,
-  "license": "UNLICENSED",
-  "author": "Leonardo Pedreira",
+  "license": "SEE LICENSE IN LICENSE",
+  "author": {
+    "name": "Leonardo Pedreira"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lpleoped/gaba-pedreira.git"
+  },
   "type": "module",
   "packageManager": "pnpm@10.15.1",
   "scripts": {
