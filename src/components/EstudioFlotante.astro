@@ -1,0 +1,49 @@
+---
+const dibujos = [
+  { obra: "RUGILO", imagen: "/identidad/rugilo.webp", clase: "rugilo", numero: "01" },
+  { obra: "DUKI", imagen: "/identidad/duki.webp", clase: "duki", numero: "02" },
+  { obra: "Horóscopo ilustrado", imagen: "/identidad/horoscopo.webp", clase: "horoscopo", numero: "03" },
+  { obra: "Fuera de la Caja", imagen: "/identidad/fuera-de-la-caja.webp", clase: "caja", numero: "04" },
+];
+---
+
+<aside
+  class="estudio-flotante"
+  aria-label="Un pequeño estudio de ilustración"
+  data-en-aria-label="A small illustration studio"
+  data-estudio
+>
+  <div class="estudio-mesa" data-estudio-mesa>
+    {
+      dibujos.map(({ obra, imagen, clase, numero }) => (
+        <button
+          class={`estudio-recorte estudio-recorte--${clase}`}
+          type="button"
+          aria-label={`Mover ilustración de ${obra}, de Gaba Pedreira`}
+          data-en-aria-label={`Move the ${obra} illustration, by Gaba Pedreira`}
+          aria-describedby="estudio-instrucciones"
+          data-estudio-recorte
+          data-lado={clase === "duki" || clase === "caja" ? "izquierdo" : "derecho"}
+        >
+          <span class="estudio-cinta" aria-hidden="true" />
+          <img src={imagen} alt="" aria-hidden="true" width="600" height="469" loading="lazy" decoding="async" draggable="false" />
+          <span class="estudio-leyenda" aria-hidden="true"><span>{numero}</span> {obra}</span>
+        </button>
+      ))
+    }
+    <p
+      class="estudio-instrucciones"
+      id="estudio-instrucciones"
+      data-en="Hover over a drawing to nudge it: it sways and gently returns to its place. You can also drag and drop it, or tap it to give it a push. With the keyboard, use the arrows to move it, Enter to give it a push and Escape to send it back to its place. The drawings stay within the edges of the page."
+    >
+      Pasá el cursor por un dibujo para empujarlo: se balancea y vuelve suavemente
+      a su lugar. También podés arrastrarlo y soltarlo, o tocarlo para darle un impulso. Con teclado, usá
+      las flechas para moverlo, Enter para darle un impulso y Escape para devolverlo
+      a su lugar. Los dibujos se mantienen en los bordes de la página.
+    </p>
+  </div>
+</aside>
+
+<script>
+  import "../scripts/estudio";
+</script>

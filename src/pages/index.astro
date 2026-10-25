@@ -1,35 +1,56 @@
 ---
 import Base from "../layouts/Base.astro";
 import CasoFila from "../components/CasoFila.astro";
+import EstudioFlotante from "../components/EstudioFlotante.astro";
+import Galardones from "../components/Galardones.astro";
 import { sitio } from "../site";
-import { casosPublicados, lineaPremios } from "../lib/casos";
+import { casosPublicados } from "../lib/casos";
 
 const casos = await casosPublicados();
 const destacados = casos.filter((caso) => caso.data.destacado);
-const premios = lineaPremios(casos);
 ---
 
 <Base titulo={sitio.nombre} descripcion={sitio.frase}>
-  <h1 class="home-nombre">
-    Gaba<br />Pedreira
-  </h1>
-  <p class="rol">{sitio.rol}</p>
-  <p class="frase">{sitio.frase}</p>
+  <div class="estudio">
+  <EstudioFlotante />
+  <div class="presentacion">
+    <h1 class="home-nombre">
+      Gaba<br /><span>Pedreira<span class="nombre-punto">.</span></span>
+    </h1>
+    <div class="presentacion-pie">
+      <p class="rol" data-en={sitio.rolEn}>{sitio.rol}</p>
+    </div>
+    <a class="salto-viaje" href="#seleccion" data-viaje="seleccion" data-en="My work.">
+      <span aria-hidden="true">↓</span>
+      Mi trabajo.
+    </a>
+  </div>
+  <section class="seleccion" id="seleccion" aria-label="Mi trabajo" data-en-aria-label="My work" tabindex="-1">
+    <div class="seccion-cabecera">
+      <span>01 — {String(destacados.length).padStart(2, "0")}</span>
+    </div>
   {
     destacados.length > 0 && (
-      <ol class="lista">
-        {destacados.map((caso) => (
-          <li>
-            <CasoFila caso={caso} />
-          </li>
-        ))}
-      </ol>
+      <div class="rollo">
+        <div class="marco">
+          <ol class="lista">
+            {destacados.map((caso) => (
+              <li>
+                <CasoFila caso={caso} />
+              </li>
+            ))}
+          </ol>
+        </div>
+      </div>
     )
   }
-  {premios && <p class="premios">{premios}</p>}
-  {sitio.email && (
-    <p class="mail">
-      <a href={`mailto:${sitio.email}`}>{sitio.email}</a>
-    </p>
-  )}
+  </section>
+  </div>
+  <Galardones />
+  <p class="home-acerca">
+    <a href="/acerca" data-en="If you want to know a bit of my story">Si querés conocer un poco de mi historia<span aria-hidden="true">↗</span></a>
+  </p>
+  <script>
+    import "../scripts/viaje";
+  </script>
 </Base>

@@ -2,7 +2,7 @@
 import Base from "../../layouts/Base.astro";
 import CasoFila from "../../components/CasoFila.astro";
 import { sitio } from "../../site";
-import { casosPublicados, etiquetaOficios } from "../../lib/casos";
+import { casosPublicados, etiquetaOficio } from "../../lib/casos";
 
 const casos = await casosPublicados();
 const vistos = new Set<string>();
@@ -12,30 +12,33 @@ const secciones = ["campaña", "motion", "ilustración", "diseño editorial", "d
       (caso) => caso.data.disciplinas[0] === oficio && !vistos.has(caso.id),
     );
     for (const item of items) vistos.add(item.id);
-    const titulo = items[0] ? etiquetaOficios(items[0]).split(", ")[0] : oficio;
-    return { titulo, items };
+    return { titulo: etiquetaOficio(oficio), en: etiquetaOficio(oficio, "en"), items };
   })
   .filter((seccion) => seccion.items.length > 0);
 const resto = casos.filter((caso) => !vistos.has(caso.id));
-if (resto.length > 0) secciones.push({ titulo: "Trabajo", items: resto });
+if (resto.length > 0) secciones.push({ titulo: "Trabajo", en: "Work", items: resto });
 ---
 
-<Base titulo={`Trabajo — ${sitio.nombre}`} descripcion={sitio.frase}>
-  <h1 class="pagina-titulo">Trabajo</h1>
+<Base titulo={`Trabajo — ${sitio.nombre}`} tituloEn={`Work — ${sitio.nombre}`} descripcion={sitio.frase}>
+  <div class="pagina-intro"><p class="eyebrow" data-en="Ideas in different forms">Ideas en distintas formas</p><h1 class="pagina-titulo" data-en="Work">Trabajo<span class="titulo-punto">.</span></h1><p class="pagina-bajada" data-en="A selection of what I've been making.">Un recorte de lo que vengo haciendo.</p></div>
   {
     casos.length === 0 ? (
-      <p class="vacio">La selección se publica cuando los casos estén cerrados.</p>
+      <p class="vacio" data-en="The selection goes live once the cases are ready.">La selección se publica cuando los casos estén cerrados.</p>
     ) : (
       secciones.map((seccion) => (
         <section class="grupo">
-          <h2>{seccion.titulo}</h2>
-          <ol class="lista">
-            {seccion.items.map((caso) => (
-              <li>
-                <CasoFila caso={caso} />
-              </li>
-            ))}
-          </ol>
+          <h2 data-en={seccion.en}>{seccion.titulo}</h2>
+          <div class="rollo">
+            <div class="marco">
+              <ol class="lista">
+                {seccion.items.map((caso) => (
+                  <li>
+                    <CasoFila caso={caso} />
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </div>
         </section>
       ))
     )

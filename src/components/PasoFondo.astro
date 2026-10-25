@@ -1,0 +1,47 @@
+---
+interface Props {
+  lugar: "maturana" | "ucu" | "um" | "brother" | "alva" | "camara" | "canal4" | "ddb";
+}
+
+const { lugar } = Astro.props;
+const instituciones = {
+  maturana: { logo: "maturana.png", x: 785, y: 479, ancho: 300, alto: 62 },
+  ucu: { logo: "ucu.svg", x: 829, y: 470, ancho: 280, alto: 66 },
+  um: { logo: "um.png", x: 760, y: 281, ancho: 440, alto: 72 },
+  brother: { logo: "brother.svg", x: 831, y: 455, ancho: 240, alto: 64 },
+  alva: { logo: "alva.svg", x: 836, y: 438, ancho: 275, alto: 65 },
+  camara: { logo: "camara.png", x: 825, y: 421, ancho: 386, alto: 40 },
+  canal4: { logo: "canal4.png", x: 961, y: 529, ancho: 78, alto: 76 },
+  ddb: { logo: "ddb.png", x: 930, y: 323, ancho: 190, alto: 120 },
+};
+const cartel = instituciones[lugar];
+const fachada = `/acerca/instituciones/${lugar}.webp`;
+---
+
+<img
+  class="paso-fachada"
+  src={fachada}
+  alt=""
+  width="1536"
+  height="1024"
+  loading="lazy"
+  decoding="async"
+  draggable="false"
+/>
+<svg
+  class="paso-dibujo"
+  viewBox="0 0 1536 1024"
+  preserveAspectRatio="xMidYMax meet"
+  fill="none"
+  aria-hidden="true"
+  focusable="false"
+>
+  <g class="paso-cartel" transform={`translate(${cartel.x} ${cartel.y})`}>
+    <image
+      href={`/acerca/instituciones/logos/${cartel.logo}`}
+      width={cartel.ancho}
+      height={cartel.alto}
+      preserveAspectRatio="xMidYMid meet"
+    />
+  </g>
+</svg>

@@ -4,19 +4,20 @@ import { sitio } from "../site";
 
 interface Props {
   titulo: string;
+  tituloEn?: string;
   descripcion: string;
   imagen?: string;
   prefetch?: string;
 }
 
-const { titulo, descripcion, imagen, prefetch } = Astro.props;
+const { titulo, tituloEn, descripcion, imagen, prefetch } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
-const imagenAbsoluta = imagen ? new URL(imagen, Astro.site).href : undefined;
+const imagenAbsoluta = new URL(imagen ?? "/og.jpg", Astro.site).href;
 const path = Astro.url.pathname;
 const secciones = [
-  { href: "/trabajo", label: "Trabajo" },
-  { href: "/acerca", label: "Acerca" },
-  { href: "/contacto", label: "Contacto" },
+  { href: "/trabajo", label: "Trabajo", en: "Work" },
+  { href: "/acerca", label: "Acerca", en: "About" },
+  { href: "/contacto", label: "Contacto", en: "Contact" },
 ];
 
 function vigente(href: string) {
@@ -29,7 +30,8 @@ function vigente(href: string) {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{titulo}</title>
+    <meta name="theme-color" content="#ffcf42" />
+    <title data-en={tituloEn}>{titulo}</title>
     <meta name="description" content={descripcion} />
     <link rel="canonical" href={canonical.href} />
     <meta property="og:locale" content="es_UY" />
@@ -38,29 +40,120 @@ function vigente(href: string) {
     <meta property="og:title" content={titulo} />
     <meta property="og:description" content={descripcion} />
     <meta property="og:url" content={canonical.href} />
-    {imagenAbsoluta && <meta property="og:image" content={imagenAbsoluta} />}
-    <meta name="twitter:card" content={imagenAbsoluta ? "summary_large_image" : "summary"} />
+    <meta property="og:image" content={imagenAbsoluta} />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={titulo} />
     <meta name="twitter:description" content={descripcion} />
-    {imagenAbsoluta && <meta name="twitter:image" content={imagenAbsoluta} />}
+    <meta name="twitter:image" content={imagenAbsoluta} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     {prefetch && <link rel="prefetch" href={prefetch} />}
   </head>
   <body>
+    <a class="saltar" href="#contenido" data-en="Skip to content">Saltar al contenido</a>
     <header class="site-header">
-      <a class="marca" href="/">{sitio.nombre}</a>
-      <nav class="nav" aria-label="Secciones">
+      <a
+        class="marca"
+        href="/"
+        aria-label={`${sitio.nombre}, inicio`}
+        data-en-aria-label={`${sitio.nombre}, home`}
+      >
+        gaba<span class="marca-punto">.</span>
+      </a>
+      <nav class="nav" aria-label="Secciones" data-en-aria-label="Sections">
         {
           secciones.map((seccion) => (
-            <a href={seccion.href} aria-current={vigente(seccion.href) ? "page" : undefined}>
+            <a href={seccion.href} aria-current={vigente(seccion.href) ? "page" : undefined} data-en={seccion.en}>
               {seccion.label}
             </a>
           ))
         }
+        <button
+          class="idioma"
+          type="button"
+          aria-label="ES / EN, read in English"
+          data-en-aria-label="ES / EN, ver en español"
+          data-idioma
+          hidden
+        >
+          <span lang="es">ES</span><span aria-hidden="true">/</span><span lang="en">EN</span>
+        </button>
       </nav>
     </header>
-    <main>
+    <main id="contenido">
       <slot />
     </main>
+    <footer class="site-footer">
+      <a class="footer-firma" href="/">Gaba Pedreira<span aria-hidden="true">↗</span></a>
+      <span data-en="From Montevideo, Uruguay.">Desde Montevideo, Uruguay.</span>
+      <div class="footer-cierre">
+      <div class="footer-redes">
+        <a href={sitio.instagram}>Instagram ↗</a>
+        <a href={sitio.behance}>Behance ↗</a>
+        <a href={sitio.linkedin}>LinkedIn ↗</a>
+      </div>
+      <div class="hecho-por">
+        <span>MadeBy</span>
+        <ul class="hecho-por-redes">
+          <li>
+            <a
+              href="https://www.linkedin.com/in/leonardo-pedreira/"
+              aria-label="LinkedIn de Leonardo Pedreira"
+              data-en-aria-label="Leonardo Pedreira on LinkedIn">LinkedIn</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://github.com/lpleoped"
+              aria-label="GitHub de Leonardo Pedreira"
+              data-en-aria-label="Leonardo Pedreira on GitHub">GitHub</a
+            >
+          </li>
+        </ul>
+      </div>
+      </div>
+    </footer>
+    <script is:inline>
+      (() => {
+        const raiz = document.documentElement;
+        const boton = document.querySelector("[data-idioma]");
+        const textos = [...document.querySelectorAll("[data-en]")].flatMap((elemento) => {
+          const nodo = [...elemento.childNodes].find(
+            (hijo) => hijo.nodeType === Node.TEXT_NODE && hijo.textContent.trim(),
+          );
+          if (!nodo) return [];
+          const es = nodo.textContent;
+          return [{ nodo, es, en: es.replace(es.trim(), () => elemento.dataset.en) }];
+        });
+        const atributos = ["aria-label", "alt"].flatMap((nombre) =>
+          [...document.querySelectorAll(`[data-en-${nombre}]`)].map((elemento) => ({
+            elemento,
+            nombre,
+            es: elemento.getAttribute(nombre),
+            en: elemento.getAttribute(`data-en-${nombre}`),
+          })),
+        );
+
+        function aplicar(idioma) {
+          raiz.lang = idioma;
+          for (const texto of textos) texto.nodo.textContent = texto[idioma];
+          for (const atributo of atributos) atributo.elemento.setAttribute(atributo.nombre, atributo[idioma]);
+        }
+
+        let guardado = null;
+        try {
+          guardado = localStorage.getItem("idioma");
+        } catch {}
+        if (guardado === "en") aplicar("en");
+
+        boton.hidden = false;
+        boton.addEventListener("click", () => {
+          const idioma = raiz.lang === "en" ? "es" : "en";
+          aplicar(idioma);
+          try {
+            localStorage.setItem("idioma", idioma);
+          } catch {}
+        });
+      })();
+    </script>
   </body>
 </html>

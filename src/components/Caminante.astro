@@ -1,0 +1,38 @@
+---
+/* Las primeras edades caminan con el recorrido; la directora de arte se planta de frente. */
+const etapas = [
+  { nombre: "nina", imagen: "/acerca/gaba-nina.webp", pasos: "/acerca/gaba-nina-pasos.webp", reflejada: true },
+  { nombre: "joven", imagen: "/acerca/gaba-joven.webp", pasos: "/acerca/gaba-joven-pasos.webp" },
+  { nombre: "adulta", imagen: "/acerca/gaba-adulta.webp", pasos: "/acerca/gaba-adulta-pasos.webp" },
+];
+---
+
+<div class="caminante" aria-hidden="true">
+  {
+    etapas.map((etapa) => (
+      <div class:list={["etapa", `etapa-${etapa.nombre}`, "etapa-caminando"]}>
+        <img
+          class:list={["etapa-estatica", { "etapa-reflejada": etapa.reflejada }]}
+          src={etapa.imagen}
+          alt=""
+          width="800"
+          height="1200"
+          loading="lazy"
+          decoding="async"
+          draggable="false"
+        />
+        <span class="etapa-pasos" style={`background-image: url("${etapa.pasos}")`}></span>
+      </div>
+    ))
+  }
+  <img
+    class="etapa etapa-actual"
+    src="/acerca/gaba-actual.webp"
+    alt=""
+    width="800"
+    height="1200"
+    loading="lazy"
+    decoding="async"
+    draggable="false"
+  />
+</div>

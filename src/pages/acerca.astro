@@ -1,25 +1,166 @@
 ---
+import { Image } from "astro:assets";
 import Base from "../layouts/Base.astro";
+import Caminante from "../components/Caminante.astro";
+import PasoFondo from "../components/PasoFondo.astro";
+import infancia from "../assets/acerca/gaba-infancia.png";
 import { sitio } from "../site";
+
+const pasos = [
+  {
+    lugarId: "maturana" as const,
+    cuando: "El comienzo",
+    cuandoEn: "The beginning",
+    lugar: "Colegio y Liceo Maturana",
+    detalle: "Educación Media Básica y Superior",
+    detalleEn: "Lower and upper secondary education",
+  },
+  {
+    lugarId: "ucu" as const,
+    cuando: "2016–2019",
+    lugar: "Universidad Católica del Uruguay",
+    detalle: "Licenciada en Comunicación",
+    detalleEn: "Bachelor's degree in Communication",
+  },
+  {
+    lugarId: "um" as const,
+    cuando: "2017–2022",
+    lugar: "Universidad de Montevideo",
+    detalle: "Asistente en dirección de postgrado.",
+    detalleEn: "Graduate program assistant.",
+  },
+  {
+    lugarId: "brother" as const,
+    cuando: "2020",
+    lugar: "Brother Escuela de Creativos",
+    detalle: "Creatividad.",
+    detalleEn: "Creativity.",
+  },
+  {
+    lugarId: "alva" as const,
+    cuando: "2020–2021",
+    lugar: "Alva Creative House",
+    detalle: "Creativa audiovisual.",
+    detalleEn: "Audiovisual creative.",
+  },
+  {
+    lugarId: "camara" as const,
+    cuando: "2021–2022",
+    lugar: "Cámara\\TBWA",
+    detalle: "Producción audiovisual.",
+    detalleEn: "Audiovisual production.",
+  },
+  {
+    lugarId: "canal4" as const,
+    cuando: "2022–2024",
+    lugar: "Canal 4",
+    detalle: "Diseño y animación.",
+    detalleEn: "Design and animation.",
+  },
+  {
+    lugarId: "ddb" as const,
+    cuando: "2024–2025",
+    lugar: "DDB Uruguay",
+    detalle: "Diseño y animación.",
+    detalleEn: "Design and animation.",
+  },
+  {
+    lugarId: "ddb" as const,
+    cuando: "Desde 2025",
+    cuandoEn: "Since 2025",
+    lugar: "DDB Uruguay",
+    detalle: "Directora de arte.",
+    detalleEn: "Art director.",
+  },
+];
 ---
 
-<Base titulo={`Acerca — ${sitio.nombre}`} descripcion={sitio.frase}>
-  <h1 class="pagina-titulo">Acerca</h1>
-  <div class="acerca">
-    <section>
-      <h2>Ahora</h2>
-      <p>Directora de arte en DDB Uruguay.</p>
-    </section>
-    <section>
-      <h2>Desde</h2>
-      <p>Montevideo.</p>
-    </section>
-    <section>
-      <h2>Antes</h2>
-      <p>Diseño y animación en Canal 4.</p>
-      <p>Producción audiovisual en Cámara\TBWA.</p>
-      <p>Creativa audiovisual en Alva Creative House.</p>
-    </section>
-    <p><a href="/contacto">Contacto</a></p>
+<Base
+  titulo={`Acerca — ${sitio.nombre}`}
+  tituloEn={`About — ${sitio.nombre}`}
+  descripcion="Gaba Pedreira, directora de arte en Montevideo. Una historia entre creatividad, diseño, animación e ilustración."
+>
+  <section class="biografia" aria-labelledby="biografia-titulo">
+    <div class="biografia-texto">
+      <p class="biografia-indice" data-en="About Gaba · Montevideo, Uruguay">Acerca de Gaba · Montevideo, Uruguay</p>
+      <h1 id="biografia-titulo" class="biografia-titulo" data-en="I was always the">Siempre fui la <em data-en="artist girl.">niña artista.</em></h1>
+      <div class="biografia-bloque">
+        <p class="biografia-entrada" data-en="I grew up. The urge to create stayed.">Crecí. Las ganas de crear se quedaron.</p>
+        <p
+          class="biografia-parrafo"
+          data-en="I'm Gaba Pedreira, an art director in Montevideo. My path brings together creativity, design, illustration and animation. And, in between, there's always room to paint."
+        >
+          Soy Gaba Pedreira, directora de arte en Montevideo. Mi recorrido reúne creatividad,
+          diseño, ilustración y animación. Y, entre una cosa y otra, siempre hay lugar para pintar.
+        </p>
+      </div>
+      <div class="biografia-enlaces">
+        <a href={sitio.behance} target="_blank" rel="noreferrer" data-en="My work on Behance">Mi trabajo en Behance <span aria-hidden="true">↗</span></a>
+        <a href={sitio.linkedin} target="_blank" rel="noreferrer">LinkedIn <span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+    <a class="salto-viaje historia-salto" href="#recorrido" data-viaje="recorrido-titulo" data-en="My story.">
+      <span aria-hidden="true">↓</span>
+      Mi historia.
+    </a>
+    <figure class="biografia-archivo">
+      <span class="biografia-cinta" aria-hidden="true"></span>
+      <Image
+        src={infancia}
+        alt="Gaba de niña, con túnica y mochila roja. La foto dice: Tú siempre serás la niña artista."
+        data-en-alt="Gaba as a child, in a school tunic with a red backpack. The photo reads: Tú siempre serás la niña artista (You will always be the artist girl)."
+        width={384}
+        height={623}
+        format="webp"
+        quality={82}
+        loading="eager"
+        decoding="async"
+      />
+      <figcaption><span data-en="Personal archive">Archivo personal</span><span data-en="The artist girl ♡">La niña artista ♡</span></figcaption>
+      <svg class="biografia-flor" viewBox="0 0 100 100" fill="none" aria-hidden="true">
+        <path d="M49 35C21 7 7 41 34 49 3 65 27 91 45 65c0 35 34 34 21 2 30 17 42-14 12-20 29-22-3-42-18-15C68 1 35 2 49 35Z" fill="currentColor" />
+        <circle cx="54" cy="49" r="12" fill="var(--papel)" />
+      </svg>
+    </figure>
+  </section>
+  <section class="camino" id="recorrido" aria-label="Trayecto" data-en-aria-label="Journey" style={`--pasos: ${pasos.length}`}>
+    <div class="camino-recorrido">
+      <div class="camino-ventana">
+        <div class="camino-fijo">
+          <div>
+            <p class="camino-indice" data-en="The path">El recorrido</p>
+            <h2 class="camino-titulo" id="recorrido-titulo" tabindex="-1" data-en="One thing led to another.">Una cosa llevó a la otra.</h2>
+          </div>
+          <p class="camino-desde"><span data-en="Learn, create,">Aprender, crear,</span><br /><span data-en="keep going.">seguir andando.</span></p>
+        </div>
+        <div class="camino-figura" aria-hidden="true">
+          <div class="caminante-bob">
+            <Caminante />
+          </div>
+        </div>
+        <ol class="camino-relato">
+          {
+            pasos.map((paso, indice) => (
+              <li>
+                <div class="paso-escena">
+                  <PasoFondo lugar={paso.lugarId} />
+                </div>
+                <div class="paso-texto">
+                  <p class="paso-cuando" data-en={paso.cuandoEn}><span class="paso-numero">{String(indice + 1).padStart(2, "0")}</span>{paso.cuando}</p>
+                  <h3 class="paso-lugar">{paso.lugar}</h3>
+                  <p class="paso-detalle" data-en={paso.detalleEn}>{paso.detalle}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </div>
+  </section>
+  <div class="camino-cierre">
+    <a href="/contacto" data-en={`${pasos.length + 1} — Let's name it. Write to me.`}>{pasos.length + 1} — Pongámosle nombre. Escribime. <span aria-hidden="true">↗</span></a>
   </div>
+  <script>
+    import "../scripts/viaje";
+  </script>
 </Base>

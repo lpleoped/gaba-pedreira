@@ -1,4 +1,5 @@
 ---
+import { Image } from "astro:assets";
 import type { Caso } from "../lib/casos";
 import { etiquetaOficios } from "../lib/casos";
 
@@ -8,24 +9,32 @@ interface Props {
 
 const { caso } = Astro.props;
 const still = caso.data.pieza.imagen ?? caso.data.pieza.poster;
-const meta = caso.data.cliente
-  ? `${caso.data.cliente} · ${etiquetaOficios(caso)}`
-  : etiquetaOficios(caso);
+const meta = (idioma: "es" | "en") =>
+  caso.data.cliente
+    ? `${caso.data.cliente} · ${etiquetaOficios(caso, idioma)}`
+    : etiquetaOficios(caso, idioma);
 ---
 
 <a class="fila" href={`/trabajo/${caso.data.slug}`} style={`--caso: ${caso.data.colorDeCaso}`}>
-  <span class="fila-anio">{caso.data.anio}</span>
+  <span class="fila-anio">{caso.data.anio}<span class="fila-signo" aria-hidden="true">↗</span></span>
   <span class="fila-titulo">{caso.data.frase ?? caso.data.titulo}</span>
-  <span class="fila-meta">{meta}</span>
+  <span class="fila-meta" data-en={meta("en")}>{meta("es")}</span>
   {
     still && (
-      <img
+      <div class="fila-visual"><Image
         class="fila-pieza"
-        src={still.src}
+        src={still}
         width={caso.data.pieza.ancho}
         height={caso.data.pieza.alto}
         alt=""
-      />
+        widths={[480, 960, 1400]}
+        sizes="(max-width: 640px) calc(100vw - 4rem), 960px"
+        format="webp"
+        quality={82}
+        loading="lazy"
+        decoding="async"
+      /></div>
     )
   }
+  <span class="fila-ver" aria-hidden="true" data-en="View project">Ver proyecto <span>↗</span></span>
 </a>
