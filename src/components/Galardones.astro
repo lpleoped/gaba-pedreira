@@ -1,0 +1,49 @@
+---
+import { galardones } from "../site";
+
+const hojas = [
+  [10, 48],
+  [7.2, 40],
+  [5.8, 32],
+  [5.6, 24],
+  [6.4, 16],
+  [8, 9],
+];
+---
+
+{
+  galardones.length > 0 && (
+    <section class="galardones" aria-label="Galardones" data-en-aria-label="Awards" tabindex="0">
+      <svg class="galardones-defs" aria-hidden="true" focusable="false">
+        <symbol id="laurel" viewBox="0 0 20 56">
+          <path d="M14 54C5 44 3 24 10 3" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+          <g fill="currentColor">
+            {hojas.map(([x, y]) => (
+              <>
+                <ellipse cx={x - 3.2} cy={y - 1} rx="1.7" ry="4" transform={`rotate(-28 ${x - 3.2} ${y - 1})`} />
+                <ellipse cx={x + 3} cy={y - 2.5} rx="1.5" ry="3.6" transform={`rotate(32 ${x + 3} ${y - 2.5})`} />
+              </>
+            ))}
+          </g>
+        </symbol>
+      </svg>
+      <div class="galardones-cinta">
+        {[false, true].map((copia) => (
+          <ul class="galardones-lista" aria-hidden={copia ? "true" : undefined}>
+            {galardones.map((galardon) => (
+              <li class="galardon">
+                <svg class="galardon-laurel" aria-hidden="true" focusable="false"><use href="#laurel" /></svg>
+                <span class="galardon-texto">
+                  <span class="galardon-distincion">{galardon.distincion}</span>
+                  <span class="galardon-festival">{galardon.festival}</span>
+                  <span class="galardon-detalle">{galardon.categoria} · {galardon.anio}</span>
+                </span>
+                <svg class="galardon-laurel galardon-laurel--derecho" aria-hidden="true" focusable="false"><use href="#laurel" /></svg>
+              </li>
+            ))}
+          </ul>
+        ))}
+      </div>
+    </section>
+  )
+}

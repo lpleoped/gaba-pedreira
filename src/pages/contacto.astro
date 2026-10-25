@@ -3,16 +3,19 @@ import Base from "../layouts/Base.astro";
 import { sitio } from "../site";
 ---
 
-<Base titulo={`Contacto — ${sitio.nombre}`} descripcion={sitio.frase}>
-  <h1 class="pagina-titulo">Contacto</h1>
+<Base titulo={`Contacto — ${sitio.nombre}`} tituloEn={`Contact — ${sitio.nombre}`} descripcion={sitio.frase}>
+  <div class="contacto-intro"><p class="eyebrow" data-en="Every idea starts with a chat">Toda idea empieza con una charla</p>
+  <h1 class="pagina-titulo" data-en="Let's make">Hagamos<br /><em data-en="things happen.">que suceda.</em></h1>
+  </div>
   <div class="contacto">
+    <a href={sitio.instagram}><span data-en="Drawings and other things">Entre dibujos y otras cosas</span>Instagram<span aria-hidden="true">↗</span></a>
+    <a href={sitio.behance}><span data-en="The creative archive">El archivo creativo</span>Behance<span aria-hidden="true">↗</span></a>
+    <a href={sitio.linkedin}><span data-en="Let's connect">Conectemos</span>LinkedIn<span aria-hidden="true">↗</span></a>
     {
       sitio.email && (
-        <a href={`mailto:${sitio.email}`}>{sitio.email}</a>
+        <a class="contacto-mail" href={`mailto:${sitio.email}`}><span data-en="Write to me">Escribime</span>{sitio.email}<span aria-hidden="true">↗</span></a>
       )
     }
-    <a href={sitio.behance}>Behance</a>
-    <a href={sitio.linkedin}>LinkedIn</a>
   </div>
-  {!sitio.email && <p class="nota">El mail se suma cuando ella lo confirme.</p>}
+  {!sitio.email && <p class="nota" data-en="The email will be added once she confirms it.">El mail se suma cuando ella lo confirme.</p>}
 </Base>

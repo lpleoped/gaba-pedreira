@@ -1,4 +1,5 @@
 ---
+import { getImage } from "astro:assets";
 import Base from "../../layouts/Base.astro";
 import Pieza from "../../components/Pieza.astro";
 import { sitio } from "../../site";
@@ -32,16 +33,31 @@ if (!caso) {
 const siguiente = casoSiguiente(casos, caso);
 const descripcion = caso.data.og?.descripcion ?? caso.data.desafio;
 const titulo = `${caso.data.titulo} — ${sitio.nombre}`;
-const imagen =
-  caso.data.og?.imagen.src ?? caso.data.pieza.imagen?.src ?? caso.data.pieza.poster?.src;
+const fuenteOg = caso.data.og?.imagen ?? caso.data.pieza.imagen ?? caso.data.pieza.poster;
+const og = fuenteOg
+  ? await getImage({ src: fuenteOg, width: Math.min(fuenteOg.width, 1200), format: "jpg", quality: 82 })
+  : undefined;
+const imagen = og?.src;
 const tieneVideo = Boolean(caso.data.pieza.video);
-const ficha = [
-  ["Rol", caso.data.rol],
-  ["Con", caso.data.colaboradores.length ? caso.data.colaboradores.join(", ") : undefined],
-  ["Cliente", caso.data.cliente],
-  ["Año", String(caso.data.anio)],
-  ["Disciplina", etiquetaOficios(caso)],
-].filter((fila): fila is [string, string] => Boolean(fila[1]));
+type Fila = { etiqueta: string; en: string; valor?: string; valorEn?: string };
+const ficha = (
+  [
+    { etiqueta: "Rol", en: "Role", valor: caso.data.rol },
+    {
+      etiqueta: "Con",
+      en: "With",
+      valor: caso.data.colaboradores.length ? caso.data.colaboradores.join(", ") : undefined,
+    },
+    { etiqueta: "Cliente", en: "Client", valor: caso.data.cliente },
+    { etiqueta: "Año", en: "Year", valor: String(caso.data.anio) },
+    {
+      etiqueta: "Disciplina",
+      en: "Discipline",
+      valor: etiquetaOficios(caso),
+      valorEn: etiquetaOficios(caso, "en"),
+    },
+  ] satisfies Fila[]
+).filter((fila): fila is Fila & { valor: string } => Boolean(fila.valor));
 ---
 
 <Base
@@ -54,19 +70,19 @@ const ficha = [
     <h1 class="caso-titulo">{caso.data.titulo}</h1>
     <dl class="ficha">
       {
-        ficha.map(([etiqueta, valor]) => (
+        ficha.map(({ etiqueta, en, valor, valorEn }) => (
           <div>
-            <dt>{etiqueta}</dt>
-            <dd>{valor}</dd>
+            <dt data-en={en}>{etiqueta}</dt>
+            <dd data-en={valorEn}>{valor}</dd>
           </div>
         ))
       }
       {
         caso.data.enlace && (
           <div>
-            <dt>Ver</dt>
+            <dt data-en="View">Ver</dt>
             <dd>
-              <a href={caso.data.enlace} rel="noopener noreferrer">
+              <a href={caso.data.enlace} rel="noopener noreferrer" data-en={etiquetaEnlace(caso.data.enlace, "en")}>
                 {etiquetaEnlace(caso.data.enlace)}
               </a>
             </dd>
@@ -99,9 +115,9 @@ const ficha = [
     {
       siguiente && (
         <a class="siguiente" href={`/trabajo/${siguiente.data.slug}`}>
-          <span>Siguiente</span>
+          <span data-en="Next">Siguiente</span>
           <span class="siguiente-titulo">{siguiente.data.titulo}</span>
-          <span>
+          <span data-en={`${etiquetaCliente(siguiente, "en")}, ${siguiente.data.anio}`}>
             {etiquetaCliente(siguiente)}, {siguiente.data.anio}
           </span>
         </a>
